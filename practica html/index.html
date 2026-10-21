@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bitácora: construí mi primer «Hola, mundo» en PSeInt</title>
+
+    <!-- Práctica 7: estilos básicos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ===== Paleta: variables para que toda la página sea consistente ===== */
+      :root {
+        --tinta: #243139; /* texto principal */
+        --acento: #0e7a6d; /* títulos, enlaces y detalles */
+        --suave: #e3f0ed; /* fondos suaves: cabecera de tabla y cita */
+        --papel: #f8f7f3; /* fondo de la página */
+        --borde: #ddd8cc; /* bordes de tabla y formulario */
+        --gris: #5f6d77; /* textos secundarios */
+      }
+
+      /* ===== Base: ancho máximo, centrado y línea legible ===== */
+      * {
+        box-sizing: border-box;
+      } /* el padding no ensancha: nada desborda */
+      html {
+        scroll-behavior: smooth;
+      } /* el menú desliza en vez de saltar */
+      body {
+        margin: 2.5rem auto; /* centra la página */
+        max-width: 860px;
+        padding: 0 1.5rem 2rem;
+        background: var(--papel);
+        color: var(--tinta);
+        font-family: "IBM Plex Sans", system-ui, sans-serif;
+        line-height: 1.7;
+      }
+
+      /* ===== Encabezado y navegación ===== */
+      header {
+        border-bottom: 4px solid var(--acento);
+        padding-bottom: 1.2rem;
+        margin-bottom: 0.5rem;
+      }
+      header p {
+        color: var(--gris);
+        font-size: 0.95rem;
+      }
+      nav {
+        margin-top: 1rem;
+      }
+      nav a {
+        margin-right: 1.1rem;
+        color: var(--acento);
+        font-weight: 600;
+        text-decoration: none;
+      }
+      nav a:hover {
+        text-decoration: underline;
+      }
+      h1 {
+        font-family: "Bricolage Grotesque", sans-serif;
+        font-weight: 800;
+        font-size: 2.15rem;
+        line-height: 1.12;
+        margin: 0 0 0.4rem;
+      }
+
+      /* ===== Títulos y párrafos ===== */
+      h2 {
+        font-family: "Bricolage Grotesque", sans-serif;
+        font-weight: 700;
+        color: var(--acento);
+        font-size: 1.35rem;
+        margin: 2.4rem 0 0.5rem;
+        padding-bottom: 0.3rem;
+        border-bottom: 1px solid var(--borde);
+      }
+      h3 {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin: 1.5rem 0 0.35rem;
+      }
+      p {
+        margin: 0.55rem 0;
+      }
+
+      /* ===== Listas: viñetas y números con el color de acento ===== */
+      ul,
+      ol {
+        margin: 0.6rem 0 0.6rem 1.2rem;
+        padding-left: 0.7rem;
+      }
+      li {
+        margin: 0.3rem 0;
+      }
+      ul li::marker,
+      ol li::marker {
+        color: var(--acento);
+        font-weight: 600;
+      }
+
+      /* ===== Secciones: separación y margen al llegar con el menú ===== */
+      section {
+        margin-block: 1.5rem;
+        scroll-margin-top: 1rem;
+      }
+
+      /* ===== Tabla de datos ===== */
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 0.8rem 0;
+      }
+      caption {
+        caption-side: top;
+        text-align: left;
+        font-weight: 600;
+        color: var(--acento);
+        padding-bottom: 0.4rem;
+      }
+      th,
+      td {
+        border: 1px solid var(--borde);
+        padding: 0.5rem 0.7rem;
+        text-align: left;
+        vertical-align: top;
+      }
+      thead th {
+        background: var(--suave);
+      }
+      tbody tr:hover {
+        background: #f2efe7;
+      }
+
+      /* ===== Cita ===== */
+      blockquote {
+        border-left: 4px solid var(--acento);
+        margin: 1.2rem 0;
+        padding: 0.4rem 1rem;
+        background: var(--suave);
+      }
+
+      /* ===== Imágenes y video: nada se desborda ni se deforma en ventana estrecha ===== */
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+      iframe {
+        max-width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 9;
+        border: 0;
+      }
+      figure {
+        margin: 1.2rem 0;
+      }
+      figcaption {
+        font-size: 0.85rem;
+        color: var(--gris);
+        margin-top: 0.3rem;
+      }
+
+      /* ===== Formulario ===== */
+      label {
+        display: block;
+        font-weight: 600;
+        margin-top: 0.8rem;
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        max-width: 420px;
+        padding: 0.45rem 0.6rem;
+        border: 1px solid var(--borde);
+        border-radius: 4px;
+        font: inherit;
+        background: #fff;
+      }
+      button[type="submit"] {
+        margin-top: 1rem;
+        background: var(--acento);
+        color: #fff;
+        border: 0;
+        padding: 0.55rem 1.4rem;
+        border-radius: 4px;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      /* ===== Pie de página ===== */
+      footer {
+        margin-top: 3rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--borde);
+        color: var(--gris);
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Práctica 1: estructura semántica y jerarquía -->
+    <header>
+      <h1>Construí mi primer «Hola, mundo» en PSeInt</h1>
+      <p>Bitácora de una experiencia</p>
+      <!-- Práctica 2: navegación y enlaces -->
+      <nav aria-label="Navegación principal">
+        <a href="#contexto">Contexto</a>
+        <a href="#desarrollo">Desarrollo</a>
+        <a href="#claves">Claves</a>
+        <a href="#registro">Registro</a>
+        <a href="#evidencias">Evidencias</a>
+        <a href="#aprendizajes">Aprendizajes</a>
+        <a href="#contacto">Contacto</a>
+        <a href="http://pseint.sourceforge.net/" target="_blank" rel="noopener"
+          >Página oficial de PSeInt</a
+        >
+        <a
+          href="https://www.youtube.com/watch?v=MZKpFHxyuHM"
+          target="_blank"
+          rel="noopener"
+          >Video: «Hola mundo» en PSeInt (Charly Cimino)</a
+        >
+        <a
+          href="https://developer.mozilla.org/es/docs/Web/HTML"
+          target="_blank"
+          rel="noopener"
+          >Guía de HTML en MDN</a
+        >
+        <a href="https://validator.w3.org/" target="_blank" rel="noopener"
+          >Validador W3C</a
+        >
+      </nav>
+    </header>
+
+    <main>
+      <section id="contexto">
+        <h2>Contexto: qué hice, cuándo y por qué...</h2>
+        <h3>Mi situación:</h3>
+        <p>
+          Durante el primer semestre de 2022, en las primeras clases de la
+          materia de Algoritmos, construí mi primer código en PSeInt: mi versión
+          del clásico «hola mundo», un pequeño programa que mostraba mi nombre y
+          mi curso.
+        </p>
+        <h3>El motivo real:</h3>
+        <p>
+          Lo hice porque no sabía qué más hacer. Era mi primera vez trabajando
+          con pseudocódigo y no sabía qué era un editor de código. Además,
+          todavía no entendía realmente qué eran las variables y los contadores.
+        </p>
+      </section>
+
+      <section id="desarrollo">
+        <h2>Desarrollo cronológico</h2>
+        <h3>Etapa 1 — Pensando qué hacer en mi primer código</h3>
+        <p>
+          Al comienzo, la profesora nos pidió que escribiéramos lo que sabíamos,
+          pero yo no entendía bien qué debía hacer. Miré a mi alrededor y vi que
+          mis compañeros estaban tan perdidos como yo, mientras que otros
+          estaban jugando en el navegador. Como nadie podía orientarme, tomé una
+          decisión: investigar por mi cuenta qué se suponía que debía hacer.
+        </p>
+        <h3>Etapa 2 — Busqué en YouTube cómo empezar con pseudocódigo</h3>
+        <p>
+          Como no se me ocurría nada, busqué en YouTube un video que explicara
+          cómo empezar a trabajar con pseudocódigo. Gracias al video y a lo que
+          leí sobre la estructura del lenguaje, por fin supe qué escribir: un
+          algoritmo que mostrara mi nombre y mi curso.
+        </p>
+        <h3>Etapa 3 — No podía ejecutar el código en PSeInt</h3>
+        <p>
+          Encontré varios ejercicios de sumas de números enteros y otros
+          ejercicios matemáticos, pero no conseguía resolverlos como esperaba
+          porque no conocía bien el entorno de la aplicación. Finalmente, un
+          compañero me explicó que debía hacer clic en una opción que decía
+          «Ejecutar», identificada con un botón verde. Cuando lo presioné, mi
+          programa se ejecutó por primera vez y vi en la consola mi nombre y mi
+          curso: mi «hola mundo» estaba vivo.
+        </p>
+      </section>
+
+      <!-- Práctica 3: listas y cita -->
+      <section id="claves">
+        <h2>Lo que tenía a la mano y mi poco o nulo conocimiento del tema</h2>
+        <h3>Mis herramientas</h3>
+        <ul>
+          <li>
+            La computadora del laboratorio, que por suerte tenía conexión a
+            Internet, el editor de pseudocódigo y las ganas de aprender.
+          </li>
+          <li>
+            Tenía PSeInt instalado en la máquina y algunos archivos de práctica
+            del curso de la mañana.
+          </li>
+          <li>
+            Abrí YouTube y busqué en Google páginas con ejemplos de ejercicios
+            prácticos, desde los más fáciles hasta los más complicados.
+          </li>
+          <li>
+            Tenía un compañero que sabía más del tema porque su profesor le
+            había enseñado durante el curso de preparación.
+          </li>
+        </ul>
+        <h3>Estos son los pasos que seguí:</h3>
+        <ol>
+          <li>
+            Leí un poco sobre la estructura del lenguaje y escribí en papel lo
+            que debía hacer el programa.
+          </li>
+          <li>Escribí una primera versión completa, aunque no funcionara.</li>
+          <li>
+            Probé el programa caso por caso, corregí los errores y conseguí que
+            funcionara.
+          </li>
+        </ol>
+        <h3>Una frase que resume mi experiencia</h3>
+        <blockquote>
+          <p>
+            «La experiencia es simplemente el nombre que le damos a nuestros
+            errores.»
+          </p>
+          <footer>
+            — Oscar Wilde, <cite>El retrato de Dorian Gray</cite> (1890)
+          </footer>
+        </blockquote>
+        <p>
+          La elegí porque mi primera sesión fue exactamente eso: una cadena de
+          errores —no entender la consigna, no saber ejecutar el programa— que
+          terminó convertida en mi primera experiencia real programando.
+        </p>
+      </section>
+
+      <!-- Práctica 4: tabla de información -->
+      <section id="registro">
+        <h2>Registro: lo que observé en mi primera sesión</h2>
+        <table>
+          <caption>
+            Actividades de mi primera sesión con PSeInt — primer semestre, 2022
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Actividad</th>
+              <th scope="col">Momento</th>
+              <th scope="col">Duración aprox.</th>
+              <th scope="col">Dificultad</th>
+              <th scope="col">Resultado</th>
+              <th scope="col">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Escribir un programa que mostrara mi nombre y mi curso</td>
+              <td>Primera clase de Algoritmos</td>
+              <td>≈ 15 min</td>
+              <td>No entendía la consigna ni el entorno de PSeInt</td>
+              <td>Lo escribí primero en papel y luego en el editor</td>
+              <td>Completado</td>
+            </tr>
+            <tr>
+              <td>Aprender la estructura del pseudocódigo</td>
+              <td>Durante esa misma clase</td>
+              <td>≈ 20 min</td>
+              <td>No se me ocurría por dónde empezar</td>
+              <td>
+                Seguí un video de YouTube y encontré ejercicios de ejemplo
+              </td>
+              <td>Completado</td>
+            </tr>
+            <tr>
+              <td>Resolver un ejercicio de suma de enteros</td>
+              <td>Al final de la sesión</td>
+              <td>≈ 10 min</td>
+              <td>No sabía cómo ejecutar el programa</td>
+              <td>Lo ejecuté con el botón verde que me mostró un compañero</td>
+              <td>Completado con ayuda</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Práctica 5: imágenes y recurso incrustado -->
+      <section id="evidencias">
+        <h2>Evidencias de mi experiencia</h2>
+        <h3>Fotografías propias</h3>
+        <figure>
+          <img
+            src="img/algoritmo-en-papel.jpg"
+            alt="Hoja de papel con el algoritmo de mi programa escrito a mano en pseudocódigo"
+            width="450"
+          />
+          <figcaption>
+            Mi algoritmo escrito a mano en papel: el primer paso antes de
+            pasarlo a PSeInt.
+          </figcaption>
+        </figure>
+        <figure>
+          <img
+            src="img/pseint-boton-verde.jpg"
+            alt="Ventana de PSeInt con mi primer programa —el «hola mundo» con mi nombre y mi curso— ejecutándose en la consola"
+            width="450"
+          />
+          <figcaption>
+            PSeInt ejecutando mi programa, con el famoso botón verde que me
+            enseñó mi compañero.
+          </figcaption>
+        </figure>
+        <h3>Un video similar a los que vi esa clase</h3>
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/MZKpFHxyuHM"
+          title="Video: HOLA MUNDO en PSeInt, tu primer programa (Charly Cimino)"
+          allow="
+            accelerometer;
+            autoplay;
+            clipboard-write;
+            encrypted-media;
+            gyroscope;
+            picture-in-picture;
+            web-share;
+          "
+          allowfullscreen
+        ></iframe>
+        <p>
+          Así se resuelve el clásico «hola mundo» paso a paso en PSeInt, con el
+          famoso botón Ejecutar incluido — muy parecido a los videos que busqué
+          esa primera clase.
+        </p>
+      </section>
+
+      <section id="aprendizajes">
+        <h2>Aprendizajes</h2>
+        <h3>Lo que aprendí...</h3>
+        <p>
+          Ese día aprendí que no debía tener miedo de preguntar a mis compañeros
+          y que podía empezar a descubrir las cosas por mí mismo, mediante la
+          prueba y el error.
+        </p>
+        <h3>Qué haría distinto si lo repitiera</h3>
+        <p>
+          Si tuviera que empezar de nuevo, practicaría en casa antes de la
+          primera clase, aunque fuera con un video, y llevaría mis dudas
+          anotadas para preguntarlas apenas empezara la sesión, en lugar de
+          esperar a perderme.
+        </p>
+      </section>
+
+      <!-- Práctica 6: formulario de contacto -->
+      <section id="contacto">
+        <h2>Contacto</h2>
+        <h3>Escríbeme sobre esta bitácora</h3>
+        <p>
+          Este formulario es demostrativo: el navegador valida los campos
+          obligatorios y el formato del correo, pero no envía mensajes reales.
+        </p>
+        <form action="#" method="get">
+          <label for="nombre">Nombre</label>
+          <input id="nombre" name="nombre" type="text" required />
+          <label for="correo">Correo</label>
+          <input id="correo" name="correo" type="email" required />
+          <label for="tema">¿Sobre qué me escribes?</label>
+          <select id="tema" name="tema" required>
+            <option value="" selected>Elige una opción…</option>
+            <option value="experiencia">Sobre mi experiencia con PSeInt</option>
+            <option value="pseint">Dudas sobre PSeInt o pseudocódigo</option>
+            <option value="pagina">Sobre esta página web</option>
+            <option value="otro">Otro tema</option>
+          </select>
+          <label for="mensaje">Mensaje</label>
+          <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
+          <button type="submit">Enviar</button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>Autoría: Bryan Manuel Chancay · 2026</p>
+    </footer>
+  </body>
+</html>
